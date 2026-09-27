@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap');
+
+:root {
+  --primary-pink: #d93b84;
+  --primary-pink-hover: #c42f73;
+  --secondary-purple: #8e14aa;
+  --secondary-purple-hover: #7b0f94;
+  --neutral-grey: #6c6b70;
+  --neutral-grey-hover: #57565b;
+  --card-bg: #ffffff;
+  --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --text-dark: #333333;
+  --text-muted: #6c6b70;
+  --font-heading: 'Fredoka', 'Quicksand', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+body {
+  background-image: url('assets/BG/BG.png');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Audio Control Button */
+.audio-control {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  background: var(--card-bg);
+  border: 1.5px solid #edd5dd;
+  border-radius: 50px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-pink);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.audio-control:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+}
+
+.audio-control .icon {
+  font-size: 1.2rem;
+}
+
+/* Container for App */
+.app-viewport {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  max-height: 850px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card Container */
+.card-container {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: 32px;
+  padding: 36px 28px 32px 28px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+/* Screen Slide Transitions */
+.screen {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 36px;
+  left: 0;
+  right: 0;
+  padding: 0 28px 32px 28px;
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.4s ease;
+  pointer-events: none;
+}
+
+.screen.active {
+  position: relative;
+  top: 0;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Mascot Image Styling */
+.mascot-wrapper {
+  width: 210px;
+  height: 210px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.mascot-img {
+  max-width: 100%;
+  max-height: 190px;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.mascot-shadow {
+  width: 120px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 6px;
+  z-index: 1;
+  filter: blur(3px);
+  opacity: 0.8;
+}
+
+/* Typography */
+.screen-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-pink);
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+.screen-title.purple {
+  color: var(--secondary-purple);
+}
+
+.screen-text {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* Buttons System */
+.btn-group {
+  width: 100%;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 28px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  text-decoration: none;
+}
+
+.btn-pink {
+  background: var(--primary-pink);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(217, 59, 132, 0.25);
+}
+
+.btn-pink:hover {
+  background: var(--primary-pink-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(217, 59, 132, 0.35);
+}
+
+.btn-purple {
+  background: var(--secondary-purple);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(142, 20, 170, 0.25);
+}
+
+.btn-purple:hover {
+  background: var(--secondary-purple-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(142, 20, 170, 0.35);
+}
+
+.btn-grey {
+  background: var(--neutral-grey);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(108, 107, 112, 0.2);
+}
+
+.btn-grey:hover {
+  background: var(--neutral-grey-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(108, 107, 112, 0.3);
+}
+
+.btn-full {
+  width: 100%;
+  flex: none;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Custom Question Card Styling */
+.question-box {
+  background: transparent;
+  border: none;
+  padding: 8px 0 20px 0;
+  margin-bottom: 12px;
+}
+
+.question-text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Pink Explanation Card Box (Survey.pdf Page 9 & 10) */
+.pink-explain-box {
+  width: 100%;
+  height: 230px;
+  background-color: #f8d7e3;
+  border-radius: 24px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.pink-explain-textarea {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #333333;
+  position: relative;
+  z-index: 1;
+}
+
+.pink-explain-textarea::placeholder {
+  color: #8c7e84;
+  font-weight: 500;
+}
+
+.box-cat-img {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 135px;
+  max-height: 135px;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+}
+
+/* Responsive Scaling */
+@media (max-height: 700px) {
+  .card-container {
+    padding: 24px 20px;
+  }
+  .mascot-wrapper {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 14px;
+  }
+  .screen-title {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .screen-text {
+    font-size: 0.95rem;
+    margin-bottom: 18px;
+  }
+  .btn {
+    padding: 13px 20px;
+    font-size: 1rem;
+  }
+}
