@@ -1,107 +1,3 @@
-// --- Web Audio API Synth (Cozy Lo-Fi Music Box & Click SFX) ---
-class AudioController {
-  constructor() {
-    this.ctx = null;
-    this.isPlaying = false;
-    this.isMuted = true;
-    this.timer = null;
-    this.noteIndex = 0;
-    
-    // Soothing melody frequencies (Pentatonic Scale C Major / A Minor)
-    this.melody = [
-      523.25, 659.25, 783.99, 1046.50, // C5, E5, G5, C6
-      880.00, 659.25, 587.33, 523.25,  // A5, E5, D5, C5
-      659.25, 783.99, 880.00, 659.25,  // E5, G5, A5, E5
-      587.33, 523.25, 440.00, 523.25   // D5, C5, A4, C5
-    ];
-  }
-
-  init() {
-    if (!this.ctx) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioCtx();
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
-  }
-
-  toggle() {
-    this.init();
-    if (this.isMuted) {
-      this.isMuted = false;
-      this.startMusic();
-      return true;
-    } else {
-      this.isMuted = true;
-      this.stopMusic();
-      return false;
-    }
-  }
-
-  playClickSFX() {
-    if (this.isMuted || !this.ctx) return;
-    try {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.08);
-
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.08);
-    } catch (e) {
-      console.warn('Audio click error:', e);
-    }
-  }
-
-  startMusic() {
-    if (this.timer) clearInterval(this.timer);
-    this.timer = setInterval(() => {
-      if (this.isMuted || !this.ctx) return;
-      this.playNote(this.melody[this.noteIndex]);
-      this.noteIndex = (this.noteIndex + 1) % this.melody.length;
-    }, 600);
-  }
-
-  stopMusic() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
-  }
-
-  playNote(freq) {
-    try {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'triangle'; // Soft music box / kalimba timbre
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start();
-      osc.stop(this.ctx.currentTime + 1.2);
-    } catch (e) {
-      console.warn('Audio note error:', e);
-    }
-  }
-}
-
-const audioCtrl = new AudioController();
-
 // =========================================================================
 // EmailJS Configuration
 // Replace these placeholder values with your own EmailJS credentials:
@@ -109,9 +5,9 @@ const audioCtrl = new AudioController();
 // - SERVICE_ID: Found under Email Services in EmailJS dashboard
 // - TEMPLATE_ID: Found under Email Templates in EmailJS dashboard
 // =========================================================================
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY_HERE";
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID_HERE";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID_HERE";
+const EMAILJS_PUBLIC_KEY = "vNlM_WY2yBHyXPYB1";
+const EMAILJS_SERVICE_ID = "service_egdpyn1";
+const EMAILJS_TEMPLATE_ID = "template_4xo38u6";
 
 // Initialize EmailJS if public key is configured
 if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY_HERE") {
@@ -133,32 +29,6 @@ function showScreen(screenId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Audio Mute Toggle Button
-  const audioBtn = document.getElementById('audioToggleBtn');
-  const audioIcon = document.getElementById('audioIcon');
-  const audioText = document.getElementById('audioText');
-
-  if (audioBtn) {
-    audioBtn.addEventListener('click', () => {
-      const active = audioCtrl.toggle();
-      if (active) {
-        audioIcon.textContent = '🔊';
-        audioText.textContent = 'Music On';
-      } else {
-        audioIcon.textContent = '🔇';
-        audioText.textContent = 'Music Off';
-      }
-    });
-  }
-
-  // Play click SFX on all button clicks
-  document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Auto-init audio context on first user interaction if enabled
-      audioCtrl.init();
-      audioCtrl.playClickSFX();
-    });
-  });
 
   // Navigation Event Listeners
   // Screen 1 -> Screen 2
@@ -217,7 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNopeOver.addEventListener('click', () => {
       selectedAnswer = "Nope, It’s over.";
       if (explanationInput) explanationInput.placeholder = "Mind sharing why?";
-      if (explainCatImg) explainCatImg.src = "assets/WhiteCat/Gemini_Generated_Image_w679euw679euw679-removebg-preview.png";
+      if (explainCatImg) {
+        explainCatImg.src = "assets/WhiteCat/No.png";
+        explainCatImg.className = "box-cat-img sitting-no";
+      }
       showScreen('screen-explain');
     });
   }
@@ -226,22 +99,51 @@ document.addEventListener('DOMContentLoaded', () => {
     btnYesChance.addEventListener('click', () => {
       selectedAnswer = "Yes (there is still a chance)";
       if (explanationInput) explanationInput.placeholder = "Can we talk in person?";
-      if (explainCatImg) explainCatImg.src = "assets/WhiteCat/Gemini_Generated_Image_qgvzsoqgvzsoqgvz-removebg-preview.png";
+      if (explainCatImg) {
+        explainCatImg.src = "assets/WhiteCat/Yes.png";
+        explainCatImg.className = "box-cat-img peeking-yes";
+      }
       showScreen('screen-explain');
     });
   }
 
-  // Explanation Screen -> Send via EmailJS -> Outcome Screen
+  // Back Button on Explanation Screen
+  const btnBackExplain = document.getElementById('btnBackExplain');
+  if (btnBackExplain) {
+    btnBackExplain.addEventListener('click', () => showScreen('screen-8'));
+  }
+
+  // Explanation Screen -> Proceed to Confirmation Screen
   const btnSendExplanation = document.getElementById('btnSendExplanation');
+  const confirmChoiceText = document.getElementById('confirmChoiceText');
+  const confirmMessageText = document.getElementById('confirmMessageText');
 
   if (btnSendExplanation) {
     btnSendExplanation.addEventListener('click', () => {
       const userMessage = explanationInput ? explanationInput.value.trim() : "";
+      if (confirmChoiceText) confirmChoiceText.textContent = selectedAnswer || "No answer selected";
+      if (confirmMessageText) confirmMessageText.textContent = userMessage || "(No message provided)";
+      showScreen('screen-confirm');
+    });
+  }
+
+  // Confirmation Screen -> Edit (Go Back to Explanation Screen)
+  const btnEditConfirm = document.getElementById('btnEditConfirm');
+  if (btnEditConfirm) {
+    btnEditConfirm.addEventListener('click', () => showScreen('screen-explain'));
+  }
+
+  // Confirmation Screen -> Final Send via EmailJS -> Outcome Screen
+  const btnFinalSend = document.getElementById('btnFinalSend');
+
+  if (btnFinalSend) {
+    btnFinalSend.addEventListener('click', () => {
+      const userMessage = explanationInput ? explanationInput.value.trim() : "";
 
       // UI Loading State
-      btnSendExplanation.disabled = true;
-      const originalText = btnSendExplanation.textContent;
-      btnSendExplanation.textContent = 'Sending...';
+      btnFinalSend.disabled = true;
+      const originalText = btnFinalSend.textContent;
+      btnFinalSend.textContent = 'Sending...';
 
       const templateParams = {
         answer: selectedAnswer || "No answer selected",
@@ -249,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       const goToOutcomeScreen = () => {
-        btnSendExplanation.disabled = false;
-        btnSendExplanation.textContent = originalText;
+        btnFinalSend.disabled = false;
+        btnFinalSend.textContent = originalText;
         if (selectedAnswer === "Nope, It’s over.") {
           showScreen('screen-9');
         } else {
@@ -265,9 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
         EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID_HERE";
 
       if (isConfigured) {
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-          .then(() => {
-            console.log('Response sent successfully via EmailJS!');
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+          .then((res) => {
+            console.log('Response sent successfully via EmailJS!', res.status, res.text);
             goToOutcomeScreen();
           })
           .catch((err) => {
@@ -283,11 +185,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Final Screens (Okay buttons)
+  // Close site function for Okay buttons
+  function closeSite() {
+    try {
+      window.close();
+      window.open('', '_self', '');
+      window.close();
+    } catch (e) {
+      console.warn('Window close error:', e);
+    }
+    // If browser security policy blocks closing top-level tab, redirect to about:blank to exit website
+    setTimeout(() => {
+      try {
+        window.location.href = "about:blank";
+      } catch (e) {
+        document.body.innerHTML = "";
+      }
+    }, 100);
+  }
+
+  // Final Screens (Okay buttons close the site)
   const btnOkay9 = document.getElementById('btnOkay9');
   const btnOkay10 = document.getElementById('btnOkay10');
-  if (btnOkay9) btnOkay9.addEventListener('click', () => showScreen('screen-goodbye'));
-  if (btnOkay10) btnOkay10.addEventListener('click', () => showScreen('screen-goodbye'));
+  if (btnOkay9) btnOkay9.addEventListener('click', closeSite);
+  if (btnOkay10) btnOkay10.addEventListener('click', closeSite);
 
   // Goodbye Screen Restart
   const btnRestart = document.getElementById('btnRestart');

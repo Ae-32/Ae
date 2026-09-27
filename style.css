@@ -23,7 +23,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -41,37 +42,6 @@ body {
   position: relative;
 }
 
-/* Audio Control Button */
-.audio-control {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 100;
-  background: var(--card-bg);
-  border: 1.5px solid #edd5dd;
-  border-radius: 50px;
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--primary-pink);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.audio-control:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  background: #ffffff;
-}
-
-.audio-control .icon {
-  font-size: 1.2rem;
-}
 
 /* Container for App */
 .app-viewport {
@@ -133,31 +103,22 @@ body {
 /* Mascot Image Styling */
 .mascot-wrapper {
   width: 210px;
-  height: 210px;
-  margin-bottom: 20px;
+  height: 200px;
+  margin-bottom: 16px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   position: relative;
 }
 
 .mascot-img {
   max-width: 100%;
-  max-height: 190px;
+  max-height: 200px;
   object-fit: contain;
-  z-index: 2;
 }
 
 .mascot-shadow {
-  width: 120px;
-  height: 14px;
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 50%;
-  position: absolute;
-  bottom: 6px;
-  z-index: 1;
-  filter: blur(3px);
-  opacity: 0.8;
+  display: none;
 }
 
 /* Typography */
@@ -196,9 +157,9 @@ body {
   border: none;
   outline: none;
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  padding: 16px 28px;
+  padding: 14px 16px;
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -208,6 +169,8 @@ body {
   align-items: center;
   flex: 1;
   text-decoration: none;
+  white-space: nowrap;
+  min-height: 52px;
 }
 
 .btn-pink {
@@ -265,10 +228,10 @@ body {
 
 .question-text {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  color: var(--text-dark);
-  line-height: 1.6;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 /* Pink Explanation Card Box (Survey.pdf Page 9 & 10) */
@@ -297,6 +260,8 @@ body {
   color: #333333;
   position: relative;
   z-index: 1;
+  padding-right: 95px;
+  padding-bottom: 50px;
 }
 
 .pink-explain-textarea::placeholder {
@@ -306,34 +271,84 @@ body {
 
 .box-cat-img {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  width: 135px;
-  max-height: 135px;
   object-fit: contain;
   pointer-events: none;
   z-index: 2;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+  transition: all 0.25s ease;
 }
+
+.box-cat-img.sitting-no {
+  right: 4px;
+  bottom: 0;
+  width: 125px;
+  max-height: 130px;
+}
+
+.box-cat-img.peeking-yes {
+  right: -32px;
+  bottom: 0;
+  width: 135px;
+  max-height: 140px;
+}
+
+/* Confirmation Summary Box Styling */
+.confirm-summary-box {
+  width: 100%;
+  background-color: #fcebf2;
+  border: 1.5px dashed #f0a8c4;
+  border-radius: 20px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.confirm-summary-item {
+  margin-bottom: 10px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.confirm-summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.confirm-label {
+  font-weight: 700;
+  color: var(--primary-pink);
+  margin-right: 6px;
+}
+
+.confirm-value {
+  color: var(--text-dark);
+  font-weight: 600;
+  word-break: break-word;
+}
+
 
 /* Responsive Scaling */
 @media (max-height: 700px) {
   .card-container {
     padding: 24px 20px;
   }
+
   .mascot-wrapper {
     width: 160px;
     height: 160px;
     margin-bottom: 14px;
   }
+
   .screen-title {
     font-size: 1.5rem;
     margin-bottom: 8px;
   }
+
   .screen-text {
     font-size: 0.95rem;
     margin-bottom: 18px;
   }
+
   .btn {
     padding: 13px 20px;
     font-size: 1rem;
