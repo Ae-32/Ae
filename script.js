@@ -7,7 +7,7 @@
 // =========================================================================
 const EMAILJS_PUBLIC_KEY = "vNlM_WY2yBHyXPYB1";
 const EMAILJS_SERVICE_ID = "service_egdpyn1";
-const EMAILJS_TEMPLATE_ID = "template_4xo38u6";
+const EMAILJS_TEMPLATE_ID = "template_jg4tybj";
 
 // Initialize EmailJS if public key is configured
 if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY_HERE") {
