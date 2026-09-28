@@ -42,8 +42,7 @@ body {
   position: relative;
 }
 
-
-/* Container for App */
+/* App Container */
 .app-viewport {
   position: relative;
   z-index: 10;
@@ -57,7 +56,6 @@ body {
   align-items: center;
 }
 
-/* Card Container */
 .card-container {
   width: 100%;
   background: var(--card-bg);
@@ -73,7 +71,7 @@ body {
   transition: all 0.4s ease;
 }
 
-/* Screen Slide Transitions */
+/* Screen Transitions */
 .screen {
   width: 100%;
   display: flex;
@@ -100,7 +98,7 @@ body {
   pointer-events: auto;
 }
 
-/* Mascot Image Styling */
+/* Mascot Images */
 .mascot-wrapper {
   width: 210px;
   height: 200px;
@@ -115,10 +113,6 @@ body {
   max-width: 100%;
   max-height: 200px;
   object-fit: contain;
-}
-
-.mascot-shadow {
-  display: none;
 }
 
 /* Typography */
@@ -144,7 +138,7 @@ body {
   margin-bottom: 24px;
 }
 
-/* Buttons System */
+/* Buttons */
 .btn-group {
   width: 100%;
   display: flex;
@@ -218,7 +212,7 @@ body {
   transform: translateY(1px) scale(0.98);
 }
 
-/* Custom Question Card Styling */
+/* Question Box */
 .question-box {
   background: transparent;
   border: none;
@@ -234,7 +228,7 @@ body {
   line-height: 1.5;
 }
 
-/* Pink Explanation Card Box (Survey.pdf Page 9 & 10) */
+/* Explanation Section */
 .pink-explain-box {
   width: 100%;
   height: 230px;
@@ -292,7 +286,7 @@ body {
   max-height: 140px;
 }
 
-/* Confirmation Summary Box Styling */
+/* Confirmation Summary Box */
 .confirm-summary-box {
   width: 100%;
   background-color: #fcebf2;
@@ -325,7 +319,6 @@ body {
   font-weight: 600;
   word-break: break-word;
 }
-
 
 /* Responsive Scaling */
 @media (max-height: 700px) {

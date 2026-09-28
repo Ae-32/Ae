@@ -1,23 +1,18 @@
-// =========================================================================
-// EmailJS Configuration
-// Replace these placeholder values with your own EmailJS credentials:
-// - PUBLIC_KEY: Found under Account > API Keys in EmailJS dashboard
-// - SERVICE_ID: Found under Email Services in EmailJS dashboard
-// - TEMPLATE_ID: Found under Email Templates in EmailJS dashboard
-// =========================================================================
+// EmailJS Credentials
 const EMAILJS_PUBLIC_KEY = "vNlM_WY2yBHyXPYB1";
 const EMAILJS_SERVICE_ID = "service_egdpyn1";
 const EMAILJS_TEMPLATE_ID = "template_jg4tybj";
 
-// Initialize EmailJS if public key is configured
-if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY_HERE") {
+// Initialize EmailJS
+if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY) {
   emailjs.init(EMAILJS_PUBLIC_KEY);
 }
 
-// --- Screen Navigation Logic ---
+// App State
 let selectedFlower = null;
 let selectedAnswer = null;
 
+// Screen Switcher
 function showScreen(screenId) {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => s.classList.remove('active'));
@@ -29,27 +24,19 @@ function showScreen(screenId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  // Navigation Event Listeners
-  // Screen 1 -> Screen 2
+  // Navigation
   const btnGetStarted = document.getElementById('btnGetStarted');
-  if (btnGetStarted) {
-    btnGetStarted.addEventListener('click', () => showScreen('screen-2'));
-  }
+  if (btnGetStarted) btnGetStarted.addEventListener('click', () => showScreen('screen-2'));
 
-  // Screen 2
   const btnSure = document.getElementById('btnSure');
   const btnBye2 = document.getElementById('btnBye2');
   if (btnSure) btnSure.addEventListener('click', () => showScreen('screen-3'));
   if (btnBye2) btnBye2.addEventListener('click', () => showScreen('screen-goodbye'));
 
-  // Screen 3 -> Screen 4
   const btnContinue3 = document.getElementById('btnContinue3');
-  if (btnContinue3) {
-    btnContinue3.addEventListener('click', () => showScreen('screen-4'));
-  }
+  if (btnContinue3) btnContinue3.addEventListener('click', () => showScreen('screen-4'));
 
-  // Screen 4 (Flower Choice)
+  // Flower Choice
   const btnTulips = document.getElementById('btnTulips');
   const btnLavender = document.getElementById('btnLavender');
   if (btnTulips) {
@@ -65,19 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Screen 5 & Screen 6 -> Screen 7
   const btnContinue5 = document.getElementById('btnContinue5');
   const btnContinue6 = document.getElementById('btnContinue6');
   if (btnContinue5) btnContinue5.addEventListener('click', () => showScreen('screen-7'));
   if (btnContinue6) btnContinue6.addEventListener('click', () => showScreen('screen-7'));
 
-  // Screen 7 (Proceed to Question)
+  // Ready Check
   const btnProceed = document.getElementById('btnProceed');
   const btnExit7 = document.getElementById('btnExit7');
   if (btnProceed) btnProceed.addEventListener('click', () => showScreen('screen-8'));
   if (btnExit7) btnExit7.addEventListener('click', () => showScreen('screen-goodbye'));
 
-  // Screen 8 (Main Clarification Question) -> Explanation Screen (Survey.pdf Page 8, 9, 10)
+  // Main Question & Answer Selection
   const btnNopeOver = document.getElementById('btnNopeOver');
   const btnYesChance = document.getElementById('btnYesChance');
   const explanationInput = document.getElementById('explanationText');
@@ -107,13 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Back Button on Explanation Screen
   const btnBackExplain = document.getElementById('btnBackExplain');
-  if (btnBackExplain) {
-    btnBackExplain.addEventListener('click', () => showScreen('screen-8'));
-  }
+  if (btnBackExplain) btnBackExplain.addEventListener('click', () => showScreen('screen-8'));
 
-  // Explanation Screen -> Proceed to Confirmation Screen
+  // Explanation -> Confirmation Screen
   const btnSendExplanation = document.getElementById('btnSendExplanation');
   const confirmChoiceText = document.getElementById('confirmChoiceText');
   const confirmMessageText = document.getElementById('confirmMessageText');
@@ -127,20 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Confirmation Screen -> Edit (Go Back to Explanation Screen)
   const btnEditConfirm = document.getElementById('btnEditConfirm');
-  if (btnEditConfirm) {
-    btnEditConfirm.addEventListener('click', () => showScreen('screen-explain'));
-  }
+  if (btnEditConfirm) btnEditConfirm.addEventListener('click', () => showScreen('screen-explain'));
 
-  // Confirmation Screen -> Final Send via EmailJS -> Outcome Screen
+  // Final Send via EmailJS
   const btnFinalSend = document.getElementById('btnFinalSend');
 
   if (btnFinalSend) {
     btnFinalSend.addEventListener('click', () => {
       const userMessage = explanationInput ? explanationInput.value.trim() : "";
 
-      // UI Loading State
       btnFinalSend.disabled = true;
       const originalText = btnFinalSend.textContent;
       btnFinalSend.textContent = 'Sending...';
@@ -160,13 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
 
-      // Check if EmailJS is properly configured with user credentials
-      const isConfigured = typeof emailjs !== 'undefined' && 
-        EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY_HERE" && 
-        EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID_HERE" && 
-        EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID_HERE";
-
-      if (isConfigured) {
+      if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY) {
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
           .then((res) => {
             console.log('Response sent successfully via EmailJS!', res.status, res.text);
@@ -177,15 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
             goToOutcomeScreen();
           });
       } else {
-        console.warn('EmailJS credentials placeholders detected. Parameters ready to send:', templateParams);
-        setTimeout(() => {
-          goToOutcomeScreen();
-        }, 400);
+        setTimeout(goToOutcomeScreen, 400);
       }
     });
   }
 
-  // Close site function for Okay buttons
+  // Close Window Helper
   function closeSite() {
     try {
       window.close();
@@ -194,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       console.warn('Window close error:', e);
     }
-    // If browser security policy blocks closing top-level tab, redirect to about:blank to exit website
     setTimeout(() => {
       try {
         window.location.href = "about:blank";
@@ -204,13 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
   }
 
-  // Final Screens (Okay buttons close the site)
   const btnOkay9 = document.getElementById('btnOkay9');
   const btnOkay10 = document.getElementById('btnOkay10');
   if (btnOkay9) btnOkay9.addEventListener('click', closeSite);
   if (btnOkay10) btnOkay10.addEventListener('click', closeSite);
 
-  // Goodbye Screen Restart
+  // Restart Flow
   const btnRestart = document.getElementById('btnRestart');
   if (btnRestart) {
     btnRestart.addEventListener('click', () => {
