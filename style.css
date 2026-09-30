@@ -320,6 +320,51 @@ body {
   word-break: break-word;
 }
 
+/* Button Spinner & Error Notice */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: btn-spin 0.75s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.send-error-notice {
+  width: 100%;
+  background-color: #fff0f3;
+  border: 1.5px solid #f8b4cb;
+  color: #c42f73;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+  line-height: 1.4;
+  animation: fadeInNotice 0.3s ease;
+}
+
+@keyframes fadeInNotice {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive Scaling */
 @media (max-height: 700px) {
   .card-container {

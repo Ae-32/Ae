@@ -128,6 +128,10 @@
         <p class="screen-text" style="margin-bottom: 14px;">Please review your answer before sending:</p>
         <div class="confirm-summary-box">
           <div class="confirm-summary-item">
+            <span class="confirm-label">Flower Chosen:</span>
+            <span id="confirmFlowerText" class="confirm-value">--</span>
+          </div>
+          <div class="confirm-summary-item">
             <span class="confirm-label">Answer:</span>
             <span id="confirmChoiceText" class="confirm-value">--</span>
           </div>
@@ -136,9 +140,13 @@
             <span id="confirmMessageText" class="confirm-value">--</span>
           </div>
         </div>
+        <div id="sendErrorNotice" class="send-error-notice" style="display: none;"></div>
         <div class="btn-group">
           <button id="btnEditConfirm" class="btn btn-grey">Edit</button>
-          <button id="btnFinalSend" class="btn btn-pink">Yes, Send!</button>
+          <button id="btnFinalSend" class="btn btn-pink">
+            <span id="btnSendSpinner" class="btn-spinner" style="display: none;"></span>
+            <span id="btnSendText">Yes, Send!</span>
+          </button>
         </div>
       </section>
 

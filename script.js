@@ -98,14 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Explanation -> Confirmation Screen
   const btnSendExplanation = document.getElementById('btnSendExplanation');
+  const confirmFlowerText = document.getElementById('confirmFlowerText');
   const confirmChoiceText = document.getElementById('confirmChoiceText');
   const confirmMessageText = document.getElementById('confirmMessageText');
+  const sendErrorNotice = document.getElementById('sendErrorNotice');
 
   if (btnSendExplanation) {
     btnSendExplanation.addEventListener('click', () => {
       const userMessage = explanationInput ? explanationInput.value.trim() : "";
+      if (confirmFlowerText) confirmFlowerText.textContent = selectedFlower || "None selected";
       if (confirmChoiceText) confirmChoiceText.textContent = selectedAnswer || "No answer selected";
       if (confirmMessageText) confirmMessageText.textContent = userMessage || "(No message provided)";
+      if (sendErrorNotice) {
+        sendErrorNotice.style.display = 'none';
+        sendErrorNotice.textContent = '';
+      }
       showScreen('screen-confirm');
     });
   }
@@ -113,29 +120,64 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnEditConfirm = document.getElementById('btnEditConfirm');
   if (btnEditConfirm) btnEditConfirm.addEventListener('click', () => showScreen('screen-explain'));
 
-  // Final Send via EmailJS
+  // Final Send via EmailJS with Loading & Error Handling
   const btnFinalSend = document.getElementById('btnFinalSend');
+  const btnSendSpinner = document.getElementById('btnSendSpinner');
+  const btnSendText = document.getElementById('btnSendText');
 
   if (btnFinalSend) {
     btnFinalSend.addEventListener('click', () => {
       const userMessage = explanationInput ? explanationInput.value.trim() : "";
 
+      // Hide previous error notice
+      if (sendErrorNotice) {
+        sendErrorNotice.style.display = 'none';
+        sendErrorNotice.textContent = '';
+      }
+
+      // Check online status
+      if (navigator.onLine === false) {
+        if (sendErrorNotice) {
+          sendErrorNotice.textContent = '⚠️ You appear to be offline. Please check your internet connection and try again.';
+          sendErrorNotice.style.display = 'block';
+        }
+        return;
+      }
+
+      // Set Loading UI State
       btnFinalSend.disabled = true;
-      const originalText = btnFinalSend.textContent;
-      btnFinalSend.textContent = 'Sending...';
+      if (btnEditConfirm) btnEditConfirm.disabled = true;
+      if (btnSendSpinner) btnSendSpinner.style.display = 'inline-block';
+      if (btnSendText) btnSendText.textContent = 'Sending...';
 
       const templateParams = {
         answer: selectedAnswer || "No answer selected",
-        message: userMessage
+        message: userMessage || "(No message provided)",
+        flower: selectedFlower || "Not specified"
+      };
+
+      const resetLoadingState = () => {
+        btnFinalSend.disabled = false;
+        if (btnEditConfirm) btnEditConfirm.disabled = false;
+        if (btnSendSpinner) btnSendSpinner.style.display = 'none';
+        if (btnSendText) btnSendText.textContent = 'Yes, Send!';
       };
 
       const goToOutcomeScreen = () => {
-        btnFinalSend.disabled = false;
-        btnFinalSend.textContent = originalText;
+        resetLoadingState();
         if (selectedAnswer === "Nope, It’s over.") {
           showScreen('screen-9');
         } else {
           showScreen('screen-10');
+        }
+      };
+
+      const handleSendError = (errMsg) => {
+        console.error('EmailJS Send Error:', errMsg);
+        resetLoadingState();
+        if (sendErrorNotice) {
+          sendErrorNotice.textContent = '⚠️ Unable to send response right now. Please check your connection and try again.';
+          sendErrorNotice.style.display = 'block';
         }
       };
 
@@ -146,11 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
             goToOutcomeScreen();
           })
           .catch((err) => {
-            console.error('EmailJS Error:', err);
-            goToOutcomeScreen();
+            handleSendError(err);
           });
       } else {
-        setTimeout(goToOutcomeScreen, 400);
+        // Fallback for missing EmailJS SDK
+        setTimeout(goToOutcomeScreen, 600);
       }
     });
   }
