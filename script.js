@@ -1,3 +1,67 @@
+// ==========================================
+// Anti-Inspection & DevTools Deterrents
+// ==========================================
+
+// Disable Right-Click (Context Menu)
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  return false;
+});
+
+// Disable Image/Element Dragging
+document.addEventListener('dragstart', (e) => {
+  e.preventDefault();
+  return false;
+});
+
+// Disable Inspect / View Source Keyboard Shortcuts
+document.addEventListener('keydown', (e) => {
+  const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+
+  // Block F12
+  if (e.key === 'F12' || e.keyCode === 123) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  // Block Ctrl+U / Cmd+U (View Page Source)
+  if (isCtrlOrCmd && (e.key === 'u' || e.key === 'U' || e.keyCode === 85)) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  // Block Ctrl+S / Cmd+S (Save Page)
+  if (isCtrlOrCmd && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  // Block Ctrl+Shift+I / J / C (DevTools, Console, Inspector)
+  if (isCtrlOrCmd && e.shiftKey) {
+    const key = (e.key || '').toUpperCase();
+    if (key === 'I' || key === 'J' || key === 'C' || [73, 74, 67].includes(e.keyCode)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }
+});
+
+// Active Anti-Debugger (Pauses execution if DevTools is opened)
+(function startAntiDebug() {
+  function trap() {
+    try {
+      (function () {
+        return function (a) {}.constructor('debugger')();
+      })();
+    } catch (err) {}
+  }
+  setInterval(trap, 300);
+})();
+
 // EmailJS Credentials
 const EMAILJS_PUBLIC_KEY = "vNlM_WY2yBHyXPYB1";
 const EMAILJS_SERVICE_ID = "service_egdpyn1";
@@ -24,6 +88,12 @@ function showScreen(screenId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Dynamic question injection (prevents spoilers in raw HTML View-Source)
+  const mainQuestionText = document.getElementById('mainQuestionText');
+  if (mainQuestionText) {
+    mainQuestionText.textContent = "I just want to ask what happened that day \u2014 when I asked if I could still pursue you and you said 'Hindi na muna.' Is there still a chance for me? Will you let me still pursue you?";
+  }
+
   // Navigation
   const btnGetStarted = document.getElementById('btnGetStarted');
   if (btnGetStarted) btnGetStarted.addEventListener('click', () => showScreen('screen-2'));
